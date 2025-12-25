@@ -4,6 +4,7 @@ import com.root.model.Order;
 import com.root.model.User;
 import com.root.model.Wallet;
 import com.root.model.WalletTransaction;
+import com.root.service.OrderService;
 import com.root.service.UserService;
 import com.root.service.WalletService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,9 @@ public class WalletController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private OrderService orderService;
 
     @GetMapping("/api/wallet")
     public ResponseEntity<Wallet> getUserWallet(@RequestHeader("Authorization") String jwt)
@@ -48,7 +52,7 @@ public class WalletController {
             @PathVariable Long orderId) throws Exception {
         User user = userService.findUserProfileByJwt(jwt);
 
-        Order order = null;
+        Order order = orderService.getOrderById(orderId);
 
         Wallet wallet = walletService.payOrderPayment(order,user);
 
